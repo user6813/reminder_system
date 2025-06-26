@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login } from '../services/auth'
+import { login, getUserById } from '../services/auth'
 import { useApi } from '../hooks/useApi'
 import { useStore } from '../context/storeProvider'
 import { toast } from 'react-toastify'
@@ -19,8 +19,12 @@ export default function Login() {
       if (!formData) return null
       const res = await login(formData.email, formData.password)
       if (res.token) {
-        console.log("res.token", res.token)
-        doLogin(res.token)
+        const userInfo = await getUserById(res.token, res?.userId || res?.id)
+        doLogin(res.token, {
+          id: userInfo.id,
+          username: userInfo.username,
+          email: userInfo.email
+        })
         toast.success('Login successful!')
         setTimeout(() => navigate('/reminders'), 1000)
       }

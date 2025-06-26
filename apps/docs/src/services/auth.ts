@@ -27,4 +27,12 @@ export async function logout(token: string) {
   })
   if (!res.ok) throw new Error('Logout failed')
   return res.json()
+}
+
+export async function getUserById(token: string, id: number) {
+  const res = await fetch(`${API.USER}/${id}`, {
+    headers: { 'Authorization': `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Failed to fetch user info')
+  return res.json()
 } 

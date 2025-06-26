@@ -36,7 +36,7 @@ const LoginFun = async ({ email, password }: LoginUser): Promise<ResponseType<Lo
   return {
     success: true,
     message: 'Login successful',
-    data: { token },
+    data: { token, userId: user.id },
   }
 }
 

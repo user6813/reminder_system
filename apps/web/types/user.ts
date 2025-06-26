@@ -10,5 +10,6 @@ export interface LoginUser {
 }
 
 export interface LoginResponse {
-  token: string
+  token: string;
+  userId: number;
 }

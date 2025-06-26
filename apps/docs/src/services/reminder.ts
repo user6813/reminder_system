@@ -8,7 +8,7 @@ export async function getReminders(token: string) {
   return res.json()
 }
 
-export async function addReminder(token: string, data: { title: string, description: string, dateTime: string }) {
+export async function addReminder(token: string, data: { title: string, description: string, dateTime: string, userId: number }) {
   const res = await fetch(API.REMINDERS, {
     method: 'POST',
     headers: {

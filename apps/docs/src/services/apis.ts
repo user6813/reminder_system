@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3000/api' // Update if needed
+const BASE_URL = 'http://localhost:5000/api' // Update if needed
 
 export const API = {
   LOGIN: `${BASE_URL}/auth/login`,

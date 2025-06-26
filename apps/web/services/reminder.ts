@@ -1,5 +1,4 @@
 import { Reminder } from '../models/reminder';
-import { User } from '../models/user';
 import { ResponseType } from '../types/global';
 
 interface CreateReminderInput {
