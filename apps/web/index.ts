@@ -4,9 +4,8 @@ import cors from 'cors'
 import db from './config/sequelize'
 import routes from './routes'
 import morgan from 'morgan'
-import { resolve } from 'path'
 
-dotenv.config({ path: resolve(__dirname, '../../.env') })
+dotenv.config()
 
 const PORT = process.env.BACKEND_PORT || 5000
 

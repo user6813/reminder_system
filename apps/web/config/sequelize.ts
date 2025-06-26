@@ -1,8 +1,7 @@
 import { Sequelize } from 'sequelize'
 import dotenv from 'dotenv'
-import { resolve } from 'path'
 
-dotenv.config({ path: resolve(__dirname, '../../../.env') })
+dotenv.config()
 
 const sequelize = new Sequelize(
   process.env.POSTGRES_DB || 'reminder_db',

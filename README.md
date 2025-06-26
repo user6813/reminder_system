@@ -1,135 +1,107 @@
-# Turborepo starter
+# 🕒 Online Reminder – Full Stack Project
 
-This Turborepo starter is maintained by the Turborepo core team.
+This is a **Full Stack Online Reminder Application** built using **Turborepo Architecture**.  
+Users can **register**, **log in**, and **create reminders**. When a reminder's time is near, the user receives an **email notification** to their registered email address.
 
-## Using this example
+---
 
-Run the following command:
+## 📦 Tech Stack
 
-```sh
-npx create-turbo@latest
-```
+- Monorepo Management: **Turborepo**
+- Package Manager: **pnpm**
+- Frontend: (React/Next.js or other - *you can mention here*)
+- Backend: (Node.js/Express or other - *you can mention here*)
+- Database: (PostgreSQL/MongoDB or other - *you can mention here*)
+- Email Service: (e.g., Nodemailer/Gmail SMTP/etc.)
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
+## 🚀 Features
 
-### Apps and Packages
+- ✅ User Registration and Authentication
+- ✅ Create, View, and Manage Reminders
+- ✅ Email Notifications before Reminder Time
+- ✅ Environment-configurable with `.env` support
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+---
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## 🛠️ Prerequisites
 
-### Utilities
+Ensure the following are installed:
 
-This Turborepo has some additional tools already setup for you:
+- **pnpm** (If not installed, run the command below)
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+\`\`\`bash
+npm install -g pnpm
+\`\`\`
 
-### Build
+---
 
-To build all apps and packages, run the following command:
+## 📥 Installation
 
-```
-cd my-turborepo
+Follow the steps below to run the project locally:
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+1. **Clone the Repository**
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+\`\`\`bash
+git clone <your-repo-url>
+\`\`\`
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+2. **Navigate to the Project Directory**
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+\`\`\`bash
+cd <project-folder-name>
+\`\`\`
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+3. **Install Dependencies**
 
-### Develop
+\`\`\`bash
+pnpm install
+\`\`\`
 
-To develop all apps and packages, run the following command:
+4. **Setup Environment Variables**
 
-```
-cd my-turborepo
+- Copy contents from \`example.env.txt\`  
+- Create a new \`.env\` file in the root directory  
+- Paste the copied contents and update the values as per your configuration
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+\`\`\`bash
+cp example.env.txt .env
+# then edit .env and update the variables
+\`\`\`
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+5. **Run the Development Server**
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+\`\`\`bash
+pnpm run dev
+\`\`\`
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+---
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+## 📧 Email Notifications
 
-### Remote Caching
+Reminders will automatically trigger email notifications close to the scheduled time. Make sure your SMTP/email configuration in \`.env\` is correctly set up.
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+---
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+## 📂 Project Structure (Turborepo Layout)
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+Example structure:
 
-```
-cd my-turborepo
+\`\`\`
+apps/
+  - web/         # Frontend
+  - api/         # Backend/API
+packages/
+  - config/      # Shared config (e.g., eslint, tsconfig)
+  - utils/       # Shared utilities
+.env
+example.env.txt
+\`\`\`
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
+---
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
+## 📌 Notes
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+- Email reminder timings and intervals can be configured from backend scheduler or cron service (implementation-specific).
+- If using external SMTP (e.g., Gmail), make sure to enable less secure apps or use App Passwords if required.
