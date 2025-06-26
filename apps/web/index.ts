@@ -9,7 +9,7 @@ dotenv.config()
 
 const app = express()
 
-db.connect()
+db.connect({ force: true })
 
 app.use(cors())
 app.use(express.json())

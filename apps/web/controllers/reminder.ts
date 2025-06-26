@@ -1,69 +1,62 @@
 import { Request, Response } from 'express'
-import { Reminder } from '../models/reminder'
-import { User } from '../models/user'
+import { GetAllReminders, GetReminderById as ServiceGetReminderById, CreateReminderFun, UpdateReminderFun, DeleteReminderFun, GetRemindersByUserId } from '../services/reminder'
 
 export const GetReminder = async (req: Request, res: Response): Promise<void> => {
-  const reminders = await Reminder.findAll()
-  if (!reminders.length) {
-    res.status(404).json({ message: 'No reminders found' })
-    return
+  const response = await GetAllReminders();
+  if (response.success) {
+    res.status(200).send(response.data);
+  } else {
+    res.status(404).json({ message: response.message });
   }
-  res.status(200).send(reminders)
 }
 
 export const GetReminderById = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
-  const reminder = await Reminder.findByPk(id)
-  if (!reminder) {
-    res.status(404).json({ message: 'Reminder not found' })
-    return
+  const { id } = req.params;
+  const response = await ServiceGetReminderById(Number(id));
+  if (response.success) {
+    res.status(200).send(response.data);
+  } else {
+    res.status(404).json({ message: response.message });
   }
-  res.status(200).send(reminder)
 }
 
 export const CreateReminder = async (req: Request, res: Response): Promise<void> => {
-  const { title, description, dateTime, userId } = req.body
-  const reminder = await Reminder.create({ title, description, dateTime, userId })
-  res.status(201).send(reminder)
+  const { title, description, dateTime, userId } = req.body;
+  const response = await CreateReminderFun({ title, description, dateTime, userId });
+  if (response.success) {
+    res.status(201).send(response.data);
+  } else {
+    res.status(400).json({ message: response.message });
+  }
 }
 
 export const UpdateReminder = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
-  const { title, description, dateTime } = req.body
-  const reminder = await Reminder.findByPk(id)
-  if (!reminder) {
-    res.status(404).json({ message: 'Reminder not found' })
-    return
+  const { id } = req.params;
+  const { title, description, dateTime } = req.body;
+  const response = await UpdateReminderFun(Number(id), { title, description, dateTime });
+  if (response.success) {
+    res.status(200).send(response.data);
+  } else {
+    res.status(404).json({ message: response.message });
   }
-  await reminder.update({ title, description, dateTime })
-  res.status(200).send(reminder)
 }
 
 export const DeleteReminder = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
-  const reminder = await Reminder.findByPk(id)
-  if (!reminder) {
-    res.status(404).json({ message: 'Reminder not found' })
-    return
+  const { id } = req.params;
+  const response = await DeleteReminderFun(Number(id));
+  if (response.success) {
+    res.status(200).send({ message: response.message });
+  } else {
+    res.status(404).json({ message: response.message });
   }
-  await reminder.destroy()
-  res.status(200).send({ message: 'Reminder deleted successfully' })
 }
 
 export const GetReminderByUserId = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
-  const reminders = await Reminder.findAll({
-    include: [
-      {
-        model: User,
-        attributes: ['id', 'username', 'email'],
-        where: { id: id },
-      },
-    ],
-  })
-  if (!reminders.length) {
-    res.status(404).json({ message: 'No reminders found' })
-    return
+  const { id } = req.params;
+  const response = await GetRemindersByUserId(Number(id));
+  if (response.success) {
+    res.status(200).send(response.data);
+  } else {
+    res.status(404).json({ message: response.message });
   }
-  res.status(200).send(reminders)
 }

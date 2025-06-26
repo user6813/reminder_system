@@ -7,6 +7,7 @@ interface ReminderAttributes {
   description: string
   dateTime: Date
   userId: number
+  reminded: boolean
   createdAt?: Date
   updatedAt?: Date
 }
@@ -19,6 +20,7 @@ export class Reminder extends Model<ReminderAttributes, ReminderCreationAttribut
   public description!: string
   public dateTime!: Date
   public userId!: number
+  public reminded!: boolean
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
@@ -50,6 +52,11 @@ Reminder.init(
         key: 'id',
       },
       onDelete: 'CASCADE',
+    },
+    reminded: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     createdAt: {
       type: DataTypes.DATE,

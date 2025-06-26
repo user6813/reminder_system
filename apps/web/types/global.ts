@@ -1,8 +1,8 @@
 import { Response } from 'express'
 
-export interface ResponseType {
+export interface ResponseType<T = any> {
     success: boolean;
     message: string;
-    data?: any;
+    data?: T;
     error?: any;
 }

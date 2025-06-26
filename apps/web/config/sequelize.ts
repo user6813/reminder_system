@@ -15,8 +15,8 @@ const sequelize = new Sequelize(
   }
 )
 
-function connect() {
-  sequelize.sync({}).then(() => {
+function connect({ force = false }: { force?: boolean } = {}) {
+  sequelize.sync({ force }).then(() => {
     console.log('Connection has been established successfully.')
   }).catch((err) => {
     console.error('Unable to connect to the database:', err)

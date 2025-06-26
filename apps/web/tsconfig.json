@@ -6,8 +6,9 @@
     "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node"]
   },
-  "include": ["index.ts"],
+  "include": ["index.ts", "utils/**/*.ts", "cron.ts"],
   "exclude": ["node_modules"]
 } 
