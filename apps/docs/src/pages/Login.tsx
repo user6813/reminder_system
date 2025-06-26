@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { login, getUserById } from '../services/auth'
 import { useApi } from '../hooks/useApi'
@@ -12,7 +12,7 @@ export default function Login() {
   const [trigger, setTrigger] = useState(0)
   const [formData, setFormData] = useState<{email: string, password: string} | null>(null)
   const navigate = useNavigate()
-  const { login: doLogin } = useStore()
+  const { login: doLogin, isAuthenticated } = useStore()
 
   const { loading, error } = useApi(
     async () => {
@@ -38,6 +38,12 @@ export default function Login() {
     setFormData({ email, password })
     setTrigger(t => t + 1)
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/reminders');
+    }
+  }, [isAuthenticated, navigate]);
 
   if (error) toast.error(error)
 

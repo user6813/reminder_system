@@ -7,10 +7,12 @@ import { useStore } from './context/storeProvider'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Reminders from './pages/Reminders'
+import Header from './components/Header'
 // import './App.css'
 
 function ProtectedRoute({ children }: { children: React.ReactElement }) {
   const { isAuthenticated } = useStore()
+  console.log("isAuthenticated", isAuthenticated)
   return isAuthenticated ? children : <Navigate to="/login" replace />
 }
 
@@ -18,16 +20,12 @@ function App() {
   return (
     <StoreProvider>
       <Router>
-        <nav style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/reminders">Reminders</Link>
-        </nav>
+        <Header />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/reminders" element={<ProtectedRoute><Reminders /></ProtectedRoute>} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/reminders" replace />} />
         </Routes>
         <ToastContainer position="top-center" autoClose={2500} />
       </Router>

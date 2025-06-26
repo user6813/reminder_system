@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { useStore } from '../context/storeProvider';
 import { getReminders, addReminder, updateReminder, deleteReminder } from '../services/reminder';
 import { toast } from 'react-toastify';
+import ReminderList from '../components/ReminderList';
+import AddReminder from '../components/AddReminder';
+import Button from '../components/Button';
 
 export default function Reminders() {
   const { user } = useStore();
@@ -11,6 +14,7 @@ export default function Reminders() {
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [selectedReminder, setSelectedReminder] = useState<any>(null);
   const [form, setForm] = useState({ title: '', description: '', dateTime: '' });
+  const [timeTick, setTimeTick] = useState(Date.now());
 
   const token = localStorage.getItem('token');
 
@@ -29,8 +33,24 @@ export default function Reminders() {
 
   useEffect(() => {
     fetchReminders();
+    const interval = setInterval(() => {
+      setTimeTick(Date.now());
+    }, 2 * 60 * 1000); // 2 minutes
+    return () => clearInterval(interval);
     // eslint-disable-next-line
   }, []);
+
+  // Split reminders into upcoming (within 30 min) and remaining, and filter out past reminders
+  const now = new Date(timeTick);
+  const halfHourLater = new Date(now.getTime() + 30 * 60000);
+  const upcomingReminders = reminders.filter(r => {
+    const dt = new Date(r.dateTime);
+    return dt > now && dt <= halfHourLater;
+  }).sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
+  const remainingReminders = reminders.filter(r => {
+    const dt = new Date(r.dateTime);
+    return dt > halfHourLater;
+  }).sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
 
   const openAddModal = () => {
     setModalMode('add');
@@ -61,6 +81,13 @@ export default function Reminders() {
   const handleModalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) return;
+    // Restrict past date/time
+    const selectedDate = new Date(form.dateTime);
+    const now = new Date();
+    if (selectedDate < now) {
+      toast.error('Cannot set a reminder in the past.');
+      return;
+    }
     try {
       if (modalMode === 'add') {
         await addReminder(token, { ...form, userId: user.id || 0 });
@@ -77,58 +104,95 @@ export default function Reminders() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto' }}>
-      <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
-        <h2>Reminders</h2>
-        <div style={{ fontSize: 16, color: '#555' }}>
-          {user.username} ({user.email})
+    <>
+      <div className="poppins reminders-container">
+        <div className="reminders-header-row">
+          <h2 className="reminders-title">Reminders</h2>
+          <Button className="reminders-add-btn" onClick={openAddModal}>
+            + Add New Reminder
+          </Button>
         </div>
-      </header>
-      <button style={{ marginBottom: 16 }} onClick={openAddModal}>Add New Reminder</button>
-      {loading ? (
-        <div>Loading reminders...</div>
-      ) : reminders.length === 0 ? (
-        <div>No reminders found.</div>
-      ) : (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {reminders.map(reminder => (
-            <li key={reminder.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 16, marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div style={{ fontWeight: 600 }}>{reminder.title}</div>
-                <div style={{ color: '#666' }}>{reminder.description}</div>
-                <div style={{ fontSize: 13, color: '#888' }}>{new Date(reminder.dateTime).toLocaleString()}</div>
-              </div>
-              <div>
-                <button onClick={() => openEditModal(reminder)} style={{ marginRight: 8 }}>Edit</button>
-                <button onClick={() => handleDelete(reminder.id)} style={{ color: 'red' }}>Delete</button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-      {showModal && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <form onSubmit={handleModalSubmit} style={{ background: '#fff', padding: 32, borderRadius: 10, minWidth: 320, boxShadow: '0 2px 16px rgba(0,0,0,0.15)' }}>
-            <h3 style={{ marginBottom: 16 }}>{modalMode === 'add' ? 'Add New Reminder' : 'Edit Reminder'}</h3>
-            <label style={{ display: 'block', marginBottom: 10 }}>
-              Title
-              <input type="text" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} required style={{ width: '100%' }} />
-            </label>
-            <label style={{ display: 'block', marginBottom: 10 }}>
-              Description
-              <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} required style={{ width: '100%' }} />
-            </label>
-            <label style={{ display: 'block', marginBottom: 16 }}>
-              Date & Time
-              <input type="datetime-local" value={form.dateTime} onChange={e => setForm(f => ({ ...f, dateTime: e.target.value }))} required style={{ width: '100%' }} />
-            </label>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button type="button" onClick={() => setShowModal(false)} style={{ marginRight: 12 }}>Cancel</button>
-              <button type="submit">{modalMode === 'add' ? 'Add' : 'Update'}</button>
+        {loading ? (
+          <div className="reminders-loading">Loading reminders...</div>
+        ) : (
+          <div className="reminders-sections">
+            <div className="reminders-section-card">
+              <h3 className="reminders-section-title reminders-upcoming-title">Upcoming Reminders</h3>
+              <ReminderList reminders={upcomingReminders} now={now} onEdit={openEditModal} onDelete={handleDelete} />
             </div>
-          </form>
-        </div>
-      )}
-    </div>
+            <div className="reminders-section-card">
+              <h3 className="reminders-section-title">List of Remaining Reminders</h3>
+              <ReminderList reminders={remainingReminders} now={now} onEdit={openEditModal} onDelete={handleDelete} />
+            </div>
+          </div>
+        )}
+        {showModal && (
+          <AddReminder
+            show={showModal}
+            modalMode={modalMode}
+            form={form}
+            setForm={setForm}
+            onClose={() => setShowModal(false)}
+            onSubmit={handleModalSubmit}
+          />
+        )}
+      </div>
+      <style>{`
+        .reminders-container {
+          max-width: 700px;
+          margin: 0 auto;
+          padding: 32px 0;
+        }
+        .reminders-header-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 32px;
+        }
+        .reminders-title {
+          margin: 0;
+          font-weight: 700;
+          color: #222;
+          letter-spacing: 1px;
+        }
+        .reminders-add-btn {
+          margin-bottom: 0;
+          font-size: 16px;
+          font-weight: 600;
+          padding: 10px 28px;
+          border-radius: 6px;
+        }
+        .reminders-loading {
+          text-align: center;
+          color: #888;
+          font-size: 18px;
+          margin-top: 60px;
+        }
+        .reminders-sections {
+          display: flex;
+          gap: 32px;
+          flex-wrap: wrap;
+          align-items: flex-start;
+        }
+        .reminders-section-card {
+          flex: 1;
+          min-width: 320px;
+          background: #f6f8fa;
+          border-radius: 12px;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+          padding: 24px;
+          margin-bottom: 32px;
+        }
+        .reminders-section-title {
+          margin-top: 0;
+          color: #222;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+        }
+        .reminders-upcoming-title {
+          color: #007bff;
+        }
+      `}</style>
+    </>
   );
 } 

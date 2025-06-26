@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { signup } from '../services/auth'
 import { useApi } from '../hooks/useApi'
 import { toast } from 'react-toastify'
 import './Auth.css'
+import { useStore } from '../context/storeProvider'
 
 export default function Signup() {
   const [username, setUsername] = useState('')
@@ -12,6 +13,7 @@ export default function Signup() {
   const [trigger, setTrigger] = useState(0)
   const [formData, setFormData] = useState<{username: string, email: string, password: string} | null>(null)
   const navigate = useNavigate()
+  const { isAuthenticated } = useStore()
 
   const { loading, error } = useApi(
     async () => {
@@ -29,6 +31,12 @@ export default function Signup() {
     setFormData({ username, email, password })
     setTrigger(t => t + 1)
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/reminders');
+    }
+  }, [isAuthenticated, navigate]);
 
   if (error) toast.error(error)
 

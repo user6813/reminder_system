@@ -51,7 +51,10 @@ const DeleteReminderFun = async (id: number): Promise<ResponseType> => {
 };
 
 const GetRemindersByUserId = async (userId: number): Promise<ResponseType<Reminder[]>> => {
-  const reminders = await Reminder.findAll({ where: { userId } });
+  const reminders = await Reminder.findAll({ 
+    where: { userId },
+    order: [['dateTime', 'ASC']], // Sort by dateTime ascending
+  });
   if (!reminders.length) {
     return { success: false, message: 'No reminders found for user' };
   }
