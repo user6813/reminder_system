@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import { resolve } from 'path'
 import * as dotenv from 'dotenv'
 
-dotenv.config({ path: resolve(__dirname, '../../../.env') })
+dotenv.config()
 
 // Configure the transporter (example uses Gmail, update as needed)
 const transporter = nodemailer.createTransport({

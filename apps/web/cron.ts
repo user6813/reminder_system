@@ -18,6 +18,7 @@ cron.schedule('*/2 * * * *', async () => {
       reminded: false,
     },
   });
+
   console.log("reminders", reminders)
 
   for (const reminder of reminders) {
