@@ -1,4 +1,8 @@
 import nodemailer from 'nodemailer';
+import { resolve } from 'path'
+import * as dotenv from 'dotenv'
+
+dotenv.config({ path: resolve(__dirname, '../../../.env') })
 
 // Configure the transporter (example uses Gmail, update as needed)
 const transporter = nodemailer.createTransport({
@@ -8,6 +12,8 @@ const transporter = nodemailer.createTransport({
     pass: process.env.MAIL_PASS,
   },
 });
+
+console.log("mail", process.env.MAIL_USER, process.env.MAIL_PASS)
 
 /**
  * Send a reminder email
