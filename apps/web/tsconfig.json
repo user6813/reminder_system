@@ -9,6 +9,6 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["index.ts", "utils/**/*.ts", "cron.ts"],
+  "include": ["src/index.ts", "utils/**/*.ts", "src/cron.ts"],
   "exclude": ["node_modules"]
 } 

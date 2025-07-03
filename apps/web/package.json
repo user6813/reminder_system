@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "dev": "nodemon --watch ./index.ts --exec ts-node ./index.ts & ts-node cron.ts",
+    "dev": "nodemon --watch src/index.ts --exec ts-node src/index.ts & ts-node src/cron.ts",
     "build": "tsc",
     "start": "node dist/index.js & node dist/cron.js",
     "postinstall": "npm run build",

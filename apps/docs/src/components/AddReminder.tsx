@@ -10,6 +10,14 @@ interface AddReminderProps {
   onSubmit: (e: React.FormEvent) => void;
 }
 
+const formatDateTimeLocal = (isoString: string) => {
+  const date = new Date(isoString);
+  // Get the local ISO string without timezone and seconds
+  const offset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offset * 60 * 1000);
+  return localDate.toISOString().slice(0, 16); // "YYYY-MM-DDTHH:MM"
+};
+
 export default function AddReminder({ show, modalMode, form, setForm, onClose, onSubmit }: AddReminderProps) {
   if (!show) return null;
   return (
@@ -42,7 +50,7 @@ export default function AddReminder({ show, modalMode, form, setForm, onClose, o
             Date & Time
             <input
               type="datetime-local"
-              value={form.dateTime}
+              value={form.dateTime ? formatDateTimeLocal(form.dateTime) : form.dateTime}
               onChange={e => setForm(f => ({ ...f, dateTime: e.target.value }))}
               required
               className="add-reminder-input"
