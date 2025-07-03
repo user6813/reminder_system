@@ -4,8 +4,9 @@
   "main": "index.ts",
   "scripts": {
     "dev": "nodemon --watch src/index.ts --exec ts-node src/index.ts & ts-node src/cron.ts",
-    "build": "tsc",
-    "start": "node dist/index.js & node dist/cron.js",
+    "build": "tsc & npm run copy:script",
+    "start": "node dist/src/index.js & node dist/src/cron.js",
+    "copy:script": " mkdir -p dist/src/views && cp -r src/views dist/src/views",
     "postinstall": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

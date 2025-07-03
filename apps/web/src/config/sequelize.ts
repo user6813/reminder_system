@@ -3,13 +3,10 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const sequelize = new Sequelize(
-  process.env.POSTGRES_DB || 'reminder_db',
-  process.env.POSTGRES_USER || 'root',
-  process.env.POSTGRES_PASSWORD || 'root',
+const DATABASE_URL = process.env.DATABASE_URL || `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT || 5432}/${process.env.POSTGRES_DB}`
+
+const sequelize = new Sequelize(DATABASE_URL,
   {
-    host: process.env.POSTGRES_HOST || 'localhost',
-    port: Number(process.env.POSTGRES_PORT) || 5432,
     dialect: 'postgres',
     logging: false,
   }

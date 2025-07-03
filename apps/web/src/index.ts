@@ -19,7 +19,7 @@ app.use(express.json())
 app.use(morgan('dev'))
 
 app.use('/api', routes)
-app.use(express.static(path.join(__dirname, 'view')));
+app.use(express.static(path.join(__dirname, 'views')));
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
