@@ -4,6 +4,7 @@ import cors from 'cors'
 import db from './config/sequelize'
 import routes from './routes'
 import morgan from 'morgan'
+import path from 'path'
 
 dotenv.config()
 
@@ -18,6 +19,7 @@ app.use(express.json())
 app.use(morgan('dev'))
 
 app.use('/api', routes)
+app.use(express.static(path.join(__dirname, 'view')));
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
