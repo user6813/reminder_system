@@ -6,7 +6,7 @@
     "dev": "nodemon --watch src/index.ts --exec ts-node src/index.ts & ts-node src/cron.ts",
     "build": "tsc & npm run copy:script",
     "start": "node dist/src/index.js & node dist/src/cron.js",
-    "copy:script": " mkdir -p dist/src/views && cp -r src/views dist/src/views",
+    "copy:script": " mkdir -p dist/src/views && cp -r src/views dist/src",
     "postinstall": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
